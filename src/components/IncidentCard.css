@@ -1,0 +1,58 @@
+/* IncidentCard.css */
+.incident-card {
+  padding: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px; /* Increased border-radius for rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.incident-card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+.incident-card .incident-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.incident-card .incident-details {
+  margin-top: 1rem;
+  color: #555;
+}
+
+.incident-card .incident-severity {
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.incident-card .incident-description {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+.incident-card .incident-severity.low {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.incident-card .incident-severity.medium {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.incident-card .incident-severity.high {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.incident-card .incident-severity.critical {
+  background-color: #f5c6cb;
+  color: #721c24;
+}
