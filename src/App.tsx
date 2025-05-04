@@ -49,31 +49,26 @@ const App = () => {
     description: '',
     reported_at: new Date(),
   });
-  const [formError, setFormError] = useState<string>(''); // Error state for form validation
+  const [formError, setFormError] = useState<string>('');
+  const [showForm, setShowForm] = useState(false); // Toggle for showing/hiding form
 
   const itemsPerPage = 3;
 
-  // Filter incidents based on severity, search query, and date range
   const filteredIncidents = incidents
     .filter((incident) => {
       const matchesSeverity = filter === 'All' || incident.severity === filter;
       const matchesSearch = incident.title.toLowerCase().includes(searchQuery.toLowerCase());
-
-      // Check if incident falls within the selected date range
       const incidentDate = incident.reported_at;
       const matchesDateRange =
         (!startDate || incidentDate >= new Date(startDate)) &&
         (!endDate || incidentDate <= new Date(endDate));
-
       return matchesSeverity && matchesSearch && matchesDateRange;
     });
 
-  // Sort incidents by date
   const sortedIncidents = sortOrder === 'Newest'
     ? filteredIncidents.sort((a, b) => b.reported_at.getTime() - a.reported_at.getTime())
     : filteredIncidents.sort((a, b) => a.reported_at.getTime() - b.reported_at.getTime());
 
-  // Pagination logic
   const totalPages = Math.ceil(sortedIncidents.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedIncidents = sortedIncidents.slice(startIndex, startIndex + itemsPerPage);
@@ -92,13 +87,11 @@ const App = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic form validation
     if (!newIncident.title || !newIncident.description || !newIncident.severity) {
-      setFormError("All fields are required."); // Display error if any field is empty
+      setFormError("All fields are required.");
       return;
     }
 
-    // Clear error message if form is valid
     setFormError('');
 
     const newIncidentWithId = {
@@ -108,7 +101,6 @@ const App = () => {
     };
     setIncidents([...incidents, newIncidentWithId]);
 
-    // Reset form after submitting
     setNewIncident({
       id: 0,
       title: '',
@@ -116,13 +108,23 @@ const App = () => {
       description: '',
       reported_at: new Date(),
     });
+
+    setShowForm(false); // Hide form after submit
   };
 
   return (
     <div style={{ padding: '2rem' }}>
       <h1>AI Safety Incident Dashboard</h1>
 
-      {/* Filters Section (Centered) */}
+      {/* Add New Incident Button at the Top Right Corner */}
+      <button
+        className="add-incident-button"
+        onClick={() => setShowForm(prev => !prev)}
+      >
+        {showForm ? 'Cancel' : 'Add New Incident'}
+      </button>
+
+      {/* Filters Section */}
       <div className="filter-section">
         <label htmlFor="search">Search by Title: </label>
         <input
@@ -163,12 +165,12 @@ const App = () => {
         </select>
       </div>
 
-      {/* Render incidents */}
+      {/* Incident Cards */}
       {paginatedIncidents.map((incident) => (
         <IncidentCard key={incident.id} incident={incident} />
       ))}
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <div>
         <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
           Prev
@@ -179,45 +181,49 @@ const App = () => {
         </button>
       </div>
 
-      {/* Add New Incident Form */}
-      <h2>Add New Incident</h2>
-      {formError && <p style={{ color: 'red' }}>{formError}</p>} {/* Show form error */}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title: </label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={newIncident.title}
-          onChange={handleInputChange}
-          required
-        />
-        <br />
-        <label htmlFor="severity">Severity: </label>
-        <select
-          id="severity"
-          name="severity"
-          value={newIncident.severity}
-          onChange={handleInputChange}
-          required
-        >
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-          <option value="Critical">Critical</option>
-        </select>
-        <br />
-        <label htmlFor="description">Description: </label>
-        <textarea
-          id="description"
-          name="description"
-          value={newIncident.description}
-          onChange={handleInputChange}
-          required
-        />
-        <br />
-        <button type="submit">Add Incident</button>
-      </form>
+      {/* Conditional Form */}
+      {showForm && (
+        <>
+          <h2>Add New Incident</h2>
+          {formError && <p style={{ color: 'red' }}>{formError}</p>}
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="title">Title: </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={newIncident.title}
+              onChange={handleInputChange}
+              required
+            />
+            <br />
+            <label htmlFor="severity">Severity: </label>
+            <select
+              id="severity"
+              name="severity"
+              value={newIncident.severity}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+            <br />
+            <label htmlFor="description">Description: </label>
+            <textarea
+              id="description"
+              name="description"
+              value={newIncident.description}
+              onChange={handleInputChange}
+              required
+            />
+            <br />
+            <button type="submit">Add Incident</button>
+          </form>
+        </>
+      )}
     </div>
   );
 };
