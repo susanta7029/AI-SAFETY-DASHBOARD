@@ -113,36 +113,28 @@ const App = () => {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem', position: 'relative' }}>
       <h1>AI Safety Incident Dashboard</h1>
 
-      {/* Add New Incident Button at the Top Right Corner */}
-      <button
-        className="add-incident-button"
-        onClick={() => setShowForm(prev => !prev)}
-      >
-        {showForm ? 'Cancel' : 'Add New Incident'}
-      </button>
-
-      {/* Filters Section */}
-      <div className="filter-section">
-        <label htmlFor="search">Search by Title: </label>
-        <input
-          type="text"
-          id="search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search incidents by title"
-        />
-        <label htmlFor="filter">Filter by Severity: </label>
-        <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="All">All</option>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-          <option value="Critical">Critical</option>
-        </select>
-        <div>
+      {/* Top Controls Row */}
+      <div className="top-controls" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', gap: '1rem' }}>
+        <div className="filter-section" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', flex: 1 }}>
+          <label htmlFor="search">Search by Title: </label>
+          <input
+            type="text"
+            id="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search incidents by title"
+          />
+          <label htmlFor="filter">Filter by Severity: </label>
+          <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="All">All</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
           <label htmlFor="startDate">Start Date: </label>
           <input
             type="date"
@@ -157,12 +149,19 @@ const App = () => {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
+          <label htmlFor="sort">Sort by Date: </label>
+          <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+            <option value="Newest">Newest First</option>
+            <option value="Oldest">Oldest First</option>
+          </select>
         </div>
-        <label htmlFor="sort">Sort by Date: </label>
-        <select id="sort" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-          <option value="Newest">Newest First</option>
-          <option value="Oldest">Oldest First</option>
-        </select>
+        <button
+          className="add-incident-button"
+          onClick={() => setShowForm(prev => !prev)}
+          style={{ marginLeft: 'auto', whiteSpace: 'nowrap' }}
+        >
+          {showForm ? 'Cancel' : 'Add New Incident'}
+        </button>
       </div>
 
       {/* Incident Cards */}
